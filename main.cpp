@@ -6,10 +6,12 @@
 
 using namespace std;
 
+// Очистка экрана консоли
 void cleanDisplay() {
     system("clear");
 }
 
+// Вывод матрицы на экран
 void showMatrix(int** matrix, int size) {
     for (int i = 0; i < size; i++) {
         for (int j = 0; j < size; j++) {
@@ -19,6 +21,7 @@ void showMatrix(int** matrix, int size) {
     }
 }
 
+// Копирование данных из одной матрицы в другую
 void copyMatrixData(int** src, int** dst, int size) {
     for (int i = 0; i < size; i++) {
         for (int j = 0; j < size; j++) {
@@ -27,6 +30,7 @@ void copyMatrixData(int** src, int** dst, int size) {
     }
 }
 
+// Генерация массива случайных чисел
 void generateRandomNumbers(int* array, int count, int maxValue) {
     random_device rd;
     mt19937 gen(rd());
@@ -37,7 +41,9 @@ void generateRandomNumbers(int* array, int count, int maxValue) {
     }
 }
 
+// Заполнение матрицы по спирали (по часовой стрелке)
 void fillSpiral(int* randArray, int** matrix, int size) {
+    // Инициализация матрицы нулями
     for (int i = 0; i < size; i++) {
         for (int j = 0; j < size; j++) {
             *(*(matrix + i) + j) = 0;
@@ -52,54 +58,102 @@ void fillSpiral(int* randArray, int** matrix, int size) {
     int top = 0, bottom = size - 1;
 
     while (top <= bottom && left <= right) {
+        // Верхняя строка слева направо
         for (int j = left; j <= right; j++) {
             *(*(matrix + top) + j) = *(randArray + idx);
             idx++;
+
+            cleanDisplay();
+            cout << "Заполнение спиралью:\n\n";
+            showMatrix(matrix, size);
+            usleep(50000);
         }
         top++;
 
+        // Правый столбец сверху вниз
         for (int i = top; i <= bottom; i++) {
             *(*(matrix + i) + right) = *(randArray + idx);
             idx++;
+
+            cleanDisplay();
+            cout << "Заполнение спиралью:\n\n";
+            showMatrix(matrix, size);
+            usleep(50000);
         }
         right--;
 
+        // Нижняя строка справа налево
         if (top <= bottom) {
             for (int j = right; j >= left; j--) {
                 *(*(matrix + bottom) + j) = *(randArray + idx);
                 idx++;
+
+                cleanDisplay();
+                cout << "Заполнение спиралью:\n\n";
+                showMatrix(matrix, size);
+                usleep(50000);
             }
             bottom--;
         }
 
+        // Левый столбец снизу вверх
         if (left <= right) {
             for (int i = bottom; i >= top; i--) {
                 *(*(matrix + i) + left) = *(randArray + idx);
                 idx++;
+
+                cleanDisplay();
+                cout << "Заполнение спиралью:\n\n";
+                showMatrix(matrix, size);
+                usleep(50000);
             }
             left++;
         }
     }
 }
 
+// Заполнение матрицы змейкой (зигзагом по строкам)
 void fillSnake(int* randArray, int** matrix, int size) {
+    // Инициализация матрицы нулями
+    for (int i = 0; i < size; i++) {
+        for (int j = 0; j < size; j++) {
+            *(*(matrix + i) + j) = 0;
+        }
+    }
+
+    cleanDisplay();
+    cout << "Заполнение змейкой:\n\n";
+
     int idx = 0;
 
     for (int i = 0; i < size; i++) {
         if (i % 2 == 0) {
+            // Слева направо для четных строк
             for (int j = 0; j < size; j++) {
                 *(*(matrix + i) + j) = *(randArray + idx);
                 idx++;
+
+                cleanDisplay();
+                cout << "Заполнение змейкой:\n\n";
+                showMatrix(matrix, size);
+                usleep(50000);
             }
         } else {
+            // Справа налево для нечетных строк
             for (int j = size - 1; j >= 0; j--) {
                 *(*(matrix + i) + j) = *(randArray + idx);
                 idx++;
+
+                cleanDisplay();
+                cout << "Заполнение змейкой:\n\n";
+                showMatrix(matrix, size);
+                usleep(50000);
             }
         }
     }
 }
 
+// Поворот блоков матрицы по часовой стрелке (a→b→c→d→a)
 void rotateBlocksClockwise(int** src, int** dst, int size) {
     int half = size / 2;
     copyMatrixData(src, dst, size);
@@ -145,6 +199,7 @@ void rotateBlocksClockwise(int** src, int** dst, int size) {
     delete[] tempBlock;
 }
 
+// Обмен блоков матрицы по диагонали (a↔d, b↔c)
 void swapBlocksDiagonally(int** src, int** dst, int size) {
     int half = size / 2;
     copyMatrixData(src, dst, size);
@@ -162,6 +217,7 @@ void swapBlocksDiagonally(int** src, int** dst, int size) {
     }
 }
 
+// Обмен блоков матрицы по вертикали (a↔c, b↔d)
 void swapBlocksVertically(int** src, int** dst, int size) {
     int half = size / 2;
     copyMatrixData(src, dst, size);
@@ -179,6 +235,7 @@ void swapBlocksVertically(int** src, int** dst, int size) {
     }
 }
 
+// Обмен блоков матрицы по горизонтали (a↔b, c↔d)
 void swapBlocksHorizontally(int** src, int** dst, int size) {
     int half = size / 2;
     copyMatrixData(src, dst, size);
@@ -196,6 +253,7 @@ void swapBlocksHorizontally(int** src, int** dst, int size) {
     }
 }
 
+// Быстрая сортировка (QuickSort) массива
 void quickSort(int* arr, int start, int end) {
     if (start >= end) return;
 
@@ -220,6 +278,7 @@ void quickSort(int* arr, int start, int end) {
     if (left < end) quickSort(arr, left, end);
 }
 
+// Преобразование матрицы в одномерный массив
 void matrixToArray(int** matrix, int* arr, int size) {
     int idx = 0;
     for (int i = 0; i < size; i++) {
@@ -230,6 +289,7 @@ void matrixToArray(int** matrix, int* arr, int size) {
     }
 }
 
+// Арифметические операции с элементами матрицы (+ - * /)
 void modifyMatrix(int** matrix, int size, int value, char operation) {
     for (int i = 0; i < size; i++) {
         for (int j = 0; j < size; j++) {
@@ -246,6 +306,7 @@ void modifyMatrix(int** matrix, int size, int value, char operation) {
     }
 }
 
+// Меню операций с блоками матриц
 void showBlockOperations(int** spiralMatrix, int** snakeMatrix, int matrixSize) {
     int matrixChoice;
     cout << "\nВыберите матрицу для перестановки блоков:\n";
